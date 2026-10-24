@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile - SVECW Clubs</title>
+  <meta name="description" content="User profile page for SVECW Clubs, showcasing personal and club details" />
+
+  <!-- Tailwind, Fonts, Font Awesome -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <style>
+    /* Navbar Styles */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: linear-gradient(to right, #111827, #1f2937, #1e40af);
+      transition: all 0.3s ease;
+      height: 10%;
+    }
+    .nav-link {
+      transition: color 0.3s ease;
+    }
+    .nav-link:hover {
+      color: #e5e7eb;
+    }
+    .nav-link.active {
+      color: #ffffff;
+      font-weight: 700;
+    }
+    .navbar-toggler-icon {
+      color: #ffffff;
+    }
+    /* Profile Styles */
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f3f4f6;
+      padding-top: 64px;
+    }
+    .profile-container {
+      margin: 24px auto;
+      padding: 16px;
+      display: flex;
+      justify-content: center;
+    }
+    .profile-card {
+      background: linear-gradient(to bottom, #e0f2fe, #f3e8ff);
+      border-radius: 12px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      padding: 16px;
+      max-width: 600px;
+      width: 100%;
+    }
+    .gradient-btn {
+      background: linear-gradient(to right, #3b82f6, #a855f7);
+      transition: all 0.3s ease;
+    }
+    .gradient-btn:hover {
+      background: linear-gradient(to right, #2563eb, #9333ea);
+    }
+    .profile-icon {
+      background: linear-gradient(to right, #3b82f6, #a855f7);
+      width: 80px;
+      height: 80px;
+      font-size: 2rem;
+    }
+    .edit-button {
+      color: #4f46e5;
+      font-weight: 600;
+      padding: 6px 12px;
+      border: 1px solid #4f46e5;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+    .edit-button:hover {
+      background: #eff6ff;
+      color: #4338ca;
+    }
+    .input-error {
+      border-color: #ef4444 !important;
+    }
+    .error-message {
+      color: #ef4444;
+      font-size: 0.75rem;
+      margin-top: 2px;
+      display: none;
+    }
+    h1 {
+      font-size: 1.5rem;
+    }
+    h2 {
+      font-size: 1.25rem;
+    }
+    h3 {
+      font-size: 1rem;
+    }
+    p, label, input, textarea {
+      font-size: 0.875rem;
+    }
+    .mb-6 {
+      margin-bottom: 1rem;
+    }
+    .mt-4 {
+      margin-top: 0.75rem;
+    }
+    .space-y-2 > * + * {
+      margin-top: 0.5rem;
+    }
+    .space-y-4 > * + * {
+      margin-top: 0.75rem;
+    }
+    /* Profile View Styles */
+    .profile-section {
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 1rem;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      text-align: left;
+    }
+    .profile-section h3 {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      padding-bottom: 0.25rem;
+      margin-bottom: 0.5rem;
+    }
+    .profile-section p {
+      display: flex;
+      align-items: center;
+      justify-content: start;
+      gap: 0.5rem;
+    }
+    /* Required Field Indicator */
+    .required::after {
+      content: '*';
+      color: #ef4444;
+      margin-left: 2px;
+    }
+  </style>
+</head>
+<body class="font-['Roboto',sans-serif]">
+  <!-- Navbar -->
+  <nav class="navbar py-4 px-4">
+    <div class="max-w-10xl mx-auto flex items-center justify-between w-full">
+      <a href="index.html" class="text-2xl font-bold text-white pl-2">SVECW Clubs</a>
+      <button class="md:hidden text-white focus:outline-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" onclick="document.getElementById('navbarNav').classList.toggle('hidden')">
+        <i class="fas fa-bars text-2xl navbar-toggler-icon"></i>
+      </button>
+      <div id="navbarNav" class="hidden md:flex md:items-center md:space-x-6">
+        <ul class="flex flex-col md:flex-row md:space-x-6">
+          <li class="nav-item">
+            <a href="home.html" class="nav-link text-white text-base font-medium px-3 py-2">Home</a>
+          </li>
+          <li class="nav-item">
+            <a id="eventsLink" href="#" class="nav-link text-white text-base font-medium px-3 py-2">Events</a>
+          </li>
+          <li class="nav-item">
+            <a href="contactUs.html" class="nav-link text-white text-base font-medium px-3 py-2">Contact</a>
+          </li>
+          <li class="nav-item">
+            <a href="profile.html" class="nav-link text-white text-base font-medium px-3 py-2 active">Profile</a>
+          </li>
+          <li class="nav-item">
+            <a id="signOutLink" href="#" class="nav-link text-white text-base font-medium px-3 py-2">Sign out</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Profile Content -->
+  <div id="root" class="profile-container">
+    <div class="profile-card"></div>
+  </div>
+
+  <script>
+    // Profile Logic
+    document.addEventListener('DOMContentLoaded', () => {
+      // Navbar Logic
+      const role = localStorage.getItem('role');
+      if (!role) {
+        window.location.href = 'index.html';
+        return;
+      }
+      const navbarNav = document.getElementById('navbarNav');
+      navbarNav.classList.add('hidden');
+      const eventsLink = document.getElementById('eventsLink');
+      if (role === 'CLUB_ADMIN' || role === 'CLUB_MEMBER') {
+        eventsLink.href = 'events_admin.html';
+      } else {
+        eventsLink.href = 'events_student.html';
+      }
+      document.getElementById('signOutLink').addEventListener('click', (e) => {
+        e.preventDefault();
+        localStorage.removeItem('role');
+        localStorage.removeItem('club');
+        localStorage.removeItem('token');
+        localStorage.removeItem('userProfile');
+        window.location.href = 'index.html';
+      });
+
+      const card = document.querySelector('.profile-card');
+
+      // Mock user data (stored in localStorage)
+      let userData = JSON.parse(localStorage.getItem('userProfile')) || {
+        id: 1,
+        name: localStorage.getItem('userName') || 'Shanjani',
+        email: localStorage.getItem('userEmail') || 'shanjani@example.com',
+        role: localStorage.getItem('role') || 'STUDENT',
+        club: localStorage.getItem('club') || 'Tech Club',
+        department: 'CSE',
+        about: '',
+        phone: '',
+        branch: '',
+        section: '',
+        clubs: [],
+      };
+
+      // Check if profile exists (required fields outside club memberships)
+      if (userData.about && userData.phone && userData.branch && userData.section) {
+        showProfileView(userData);
+      } else {
+        showProfileForm(userData);
+      }
+
+      function showProfileView(userData) {
+        card.innerHTML = `
+          <div class="relative">
+            <button id="editProfileBtn" class="edit-button absolute top-2 right-2"><i class="fas fa-edit mr-1"></i> Edit Profile</button>
+            <div class="flex flex-col items-center">
+              <div class="rounded-full profile-icon flex items-center justify-center text-white font-bold mb-3">
+                ${userData.name ? userData.name[0].toUpperCase() : 'S'}
+              </div>
+              <h2 class="font-bold text-gray-800">${userData.name || 'User'}</h2>
+              <p class="text-gray-600 text-sm mt-1">${userData.role === 'STUDENT' ? 'SVECW Student' : userData.role}</p>
+            </div>
+            <div class="profile-section">
+              <h3 class="font-semibold text-gray-800">About</h3>
+              <p class="text-gray-600 text-sm">${userData.about || 'N/A'}</p>
+            </div>
+            <div class="profile-section">
+              <h3 class="font-semibold text-gray-800">Academic Details</h3>
+              <div class="space-y-1">
+                <p class="text-gray-600 text-sm"><i class="fas fa-book text-blue-600 mr-2"></i>Department: ${userData.department || 'N/A'}</p>
+                <p class="text-gray-600 text-sm"><i class="fas fa-graduation-cap text-blue-600 mr-2"></i>Branch: ${userData.branch || 'N/A'}</p>
+                <p class="text-gray-600 text-sm"><i class="fas fa-chalkboard text-blue-600 mr-2"></i>Section: ${userData.section || 'N/A'}</p>
+              </div>
+            </div>
+            <div class="profile-section">
+              <h3 class="font-semibold text-gray-800">Contact Information</h3>
+              <div class="space-y-1">
+                <p class="text-gray-600 text-sm"><i class="fas fa-envelope text-blue-600 mr-2"></i>${userData.email}</p>
+                <p class="text-gray-600 text-sm"><i class="fas fa-phone text-blue-600 mr-2"></i>${userData.phone || 'N/A'}</p>
+              </div>
+            </div>
+        `;
+        document.getElementById('editProfileBtn').addEventListener('click', () => {
+          showProfileForm(userData);
+        });
+      }
+
+      function showProfileForm(userData) {
+        card.innerHTML = `
+          <div>
+            <h1 class="text-purple-600 text-center mb-4">Create your profile</h1>
+            <form id="profileForm">
+              <div class="mb-6">
+                <h3 class="font-semibold text-gray-800 flex items-center"><i class="fas fa-user mr-2"></i> Basic Information</h3>
+                <div class="mt-2">
+                  <label class="block text-gray-600 required">Full Name</label>
+                  <input type="text" id="fullName" value="${userData.name || ''}" class="w-full border rounded-lg p-2 mt-1 text-sm" placeholder="Enter your full name" required>
+                </div>
+                <div class="mt-2">
+                  <label class="block text-gray-600 required">About You</label>
+                  <textarea id="about" class="w-full border rounded-lg p-2 mt-1 text-sm" rows="3" placeholder="Tell us about yourself, your interests, and what you do..." required>${userData.about || ''}</textarea>
+                </div>
+              </div>
+              <div class="mb-6">
+                <h3 class="font-semibold text-gray-800 flex items-center"><i class="fas fa-envelope mr-2"></i> Contact Information</h3>
+                <div class="mt-2">
+                  <label class="block text-gray-600 required">Email Address</label>
+                  <input type="email" id="email" value="${userData.email}" class="w-full border rounded-lg p-2 mt-1 text-sm" placeholder="Enter your email address" required>
+                </div>
+                <div class="mt-2">
+                  <label class="block text-gray-600 required">Phone Number</label>
+                  <input type="text" id="phone" value="${userData.phone || ''}" class="w-full border rounded-lg p-2 mt-1 text-sm" placeholder="+91 9876543210" required>
+                  <span class="error-message" id="phoneError">Please enter a valid phone number (e.g., +919876543210).</span>
+                </div>
+              </div>
+              <div class="mb-6">
+                <h3 class="font-semibold text-gray-800 flex items-center"><i class="fas fa-book mr-2"></i> Academic Details</h3>
+                <div class="mt-2">
+                  <label class="block text-gray-600 required">Branch</label>
+                  <input type="text" id="branch" value="${userData.branch || ''}" class="w-full border rounded-lg p-2 mt-1 text-sm" placeholder="e.g., CSE, ECE" required>
+                </div>
+                <div class="mt-2">
+                  <label class="block text-gray-600 required">Section</label>
+                  <input type="text" id="section" value="${userData.section || ''}" class="w-full border rounded-lg p-2 mt-1 text-sm" placeholder="e.g., A, B" required>
+                </div>
+              </div>
+              <div class="mb-6">
+                <h3 class="font-semibold text-gray-800 flex items-center"><i class="fas fa-users mr-2"></i> Club Memberships</h3>
+                <div id="clubMemberships" class="mt-2 space-y-2">
+                  <div class="border rounded-lg p-3">
+                    <div class="flex justify-between items-center">
+                      <h4 class="text-gray-800 font-medium text-sm">Club 1</h4>
+                      <button type="button" class="text-gray-600 hover:text-gray-800 text-sm" onclick="addClubMembership()"><i class="fas fa-plus"></i> Add Club</button>
+                    </div>
+                    <div class="mt-2">
+                      <label class="block text-gray-600">Club Name</label>
+                      <input type="text" name="clubName" value="${userData.club || ''}" class="w-full border rounded-lg p-2 mt-1 text-sm" placeholder="e.g., Coding Club, Drama Club">
+                    </div>
+                    <div class="mt-2">
+                      <label class="block text-gray-600">Your Role</label>
+                      <input type="text" name="clubRole" value="${userData.role === 'CLUB_ADMIN' ? 'President' : userData.role === 'CLUB_MEMBER' ? 'Member' : ''}" class="w-full border rounded-lg p-2 mt-1 text-sm" placeholder="e.g., President, Member, Secretary">
+                    </div>
+                    <div class="mt-2">
+                      <label class="block text-gray-600">Contributions</label>
+                      <textarea name="contributions" class="w-full border rounded-lg p-2 mt-1 text-sm" rows="2" placeholder="Describe your contributions and activities in the club...">${userData.clubs && userData.clubs[0] ? userData.clubs[0].contributions : ''}</textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="flex justify-center">
+                <button type="submit" class="gradient-btn text-white px-4 py-1 rounded-lg text-sm">Create Profile</button>
+              </div>
+            </form>
+          </div>
+        `;
+
+        // Add Club Membership Dynamically
+        window.addClubMembership = function() {
+          const clubMemberships = document.getElementById('clubMemberships');
+          const clubCount = clubMemberships.children.length + 1;
+          const newClub = document.createElement('div');
+          newClub.className = 'border rounded-lg p-3 mt-2';
+          newClub.innerHTML = `
+            <div class="flex justify-between items-center">
+              <h4 class="text-gray-800 font-medium text-sm">Club ${clubCount}</h4>
+              <button type="button" class="text-gray-600 hover:text-red-600 text-sm" onclick="this.parentElement.parentElement.remove()"><i class="fas fa-trash"></i></button>
+            </div>
+            <div class="mt-2">
+              <label class="block text-gray-600">Club Name</label>
+              <input type="text" name="clubName" class="w-full border rounded-lg p-2 mt-1 text-sm" placeholder="e.g., Coding Club, Drama Club">
+            </div>
+            <div class="mt-2">
+              <label class="block text-gray-600">Your Role</label>
+              <input type="text" name="clubRole" class="w-full border rounded-lg p-2 mt-1 text-sm" placeholder="e.g., President, Member, Secretary">
+            </div>
+            <div class="mt-2">
+              <label class="block text-gray-600">Contributions</label>
+              <textarea name="contributions" class="w-full border rounded-lg p-2 mt-1 text-sm" rows="2" placeholder="Describe your contributions and activities in the club..."></textarea>
+            </div>
+          `;
+          clubMemberships.appendChild(newClub);
+        };
+
+        // Validate Phone Number
+        const phoneInput = document.getElementById('phone');
+        const phoneError = document.getElementById('phoneError');
+        const phonePattern = /\+?[0-9]{10,14}/;
+
+        phoneInput.addEventListener('input', () => {
+          if (!phonePattern.test(phoneInput.value)) {
+            phoneInput.classList.add('input-error');
+            phoneError.style.display = 'block';
+          } else {
+            phoneInput.classList.remove('input-error');
+            phoneError.style.display = 'none';
+          }
+        });
+
+        // Form Submission
+        document.getElementById('profileForm').addEventListener('submit', (e) => {
+          e.preventDefault();
+
+          // Validate phone number format
+          if (!phonePattern.test(phoneInput.value)) {
+            phoneInput.classList.add('input-error');
+            phoneError.style.display = 'block';
+            return;
+          }
+
+          const updatedData = {
+            id: userData.id,
+            name: document.getElementById('fullName').value,
+            about: document.getElementById('about').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('phone').value,
+            branch: document.getElementById('branch').value,
+            section: document.getElementById('section').value,
+            department: userData.department,
+            role: userData.role,
+            club: userData.club,
+            clubs: Array.from(document.querySelectorAll('#clubMemberships > div')).map(club => ({
+              name: club.querySelector('input[name="clubName"]').value || '',
+              role: club.querySelector('input[name="clubRole"]').value || '',
+              contributions: club.querySelector('textarea[name="contributions"]').value || '',
+            })).filter(club => club.name || club.role || club.contributions), // Only include non-empty club entries
+          };
+
+          // Update localStorage items for email if changed
+          localStorage.setItem('userEmail', updatedData.email);
+          localStorage.setItem('userProfile', JSON.stringify(updatedData));
+          userData = updatedData;
+
+          // Show profile view
+          showProfileView(updatedData);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

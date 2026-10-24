@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>College Clubs Showcase</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to bottom right, #f3e8ff, #e0f2fe);
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 60px auto;
+      padding: 0 20px;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .section-title h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #1f2937;
+    }
+
+    .section-title p {
+      font-size: 1.1rem;
+      color: #4b5563;
+      max-width: 600px;
+      margin: 10px auto 0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+
+    .club-card {
+      display: flex;
+      flex-direction: column;
+      background-color: rgba(255, 255, 255, 0.95);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      height: 450px;
+      text-decoration: none;
+    }
+
+    .club-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+    }
+
+    .club-image-wrapper {
+      height: 250px;
+      background-color: #f0f0f0;
+    }
+
+    .club-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    .club-body {
+      padding: 16px 20px 20px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      box-sizing: border-box;
+    }
+
+    .club-body h5 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: #1f2937;
+    }
+
+    .club-body p {
+      font-size: 0.95rem;
+      color: #6b7280;
+      line-height: 1.5;
+      margin: 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+  </style>
+</head>
+<body>
+
+<section class="container">
+  <div class="section-title">
+    <h2>Discover Amazing Clubs</h2>
+    <p>Find your community and pursue your passions. Join clubs that match your interests and connect with like-minded people.</p>
+  </div>
+
+  <div class="grid">
+    <!-- Repeat for each club -->
+    <a href="iste.html">
+      <div class="club-card">
+        <div class="club-image-wrapper">
+          <img src="https://static.vecteezy.com/system/resources/previews/013/948/680/original/girl-dancing-traditional-logo-vector.jpg" style="height: 250px;" alt="Rhythmic Thunders" class="club-image"/>
+        </div>
+        <div class="club-body">
+          <h5>Rhythmic Thunders</h5>
+          <p>Rhythmic Thunders is a vibrant and energetic dance club where passion meets performance. Whether you're a beginner or an experienced dancer, this club welcomes all with lively beats.</p>
+        </div>
+      </div>
+    </a>
+
+    <a href="music.html">
+      <div class="club-card">
+        <div class="club-image-wrapper">
+          <img src="https://i.pinimg.com/736x/33/e2/42/33e242e709ba0546c802316ef459066f.jpg" alt="Music Club" class="club-image"/>
+        </div>
+        <div class="club-body">
+          <h5>Music Club</h5>
+          <p>Dedicated to promoting Indian Classical Music and offering training to those interested in vocal performance and rhythms.</p>
+        </div>
+      </div>
+    </a>
+
+    <a href="idea.html">
+      <div class="club-card">
+        <div class="club-image-wrapper">
+          <img src="https://i.pinimg.com/736x/f2/f1/eb/f2f1eb00099b0c2380ce485a02c05d7c.jpg" alt="Idea Club" class="club-image"/>
+        </div>
+        <div class="club-body">
+          <h5>Idea Club</h5>
+          <p>A creative space for students to express innovative ideas, develop reading habits, and sharpen analytical thinking.</p>
+        </div>
+      </div>
+    </a>
+
+    <a href="techpost.html">
+      <div class="club-card">
+        <div class="club-image-wrapper">
+          <img src="https://plus.unsplash.com/premium_photo-1683121716061-3faddf4dc504?q=80" alt="TechPost ClubCode" class="club-image"/>
+        </div>
+        <div class="club-body">
+          <h5>TechPost ClubCode</h5>
+          <p>Focused on sharing latest tech trends, coding practices, and building impactful real-time software projects.</p>
+        </div>
+      </div>
+    </a>
+
+    <a href="energy.html">
+      <div class="club-card">
+        <div class="club-image-wrapper">
+          <img src="https://plus.unsplash.com/premium_photo-1679917152396-4b18accacb9d?q=80" alt="Energy Swaraj Club" class="club-image"/>
+        </div>
+        <div class="club-body">
+          <h5>Energy Swaraj Club</h5>
+          <p>Dedicated to spreading awareness about renewable energy, solar adoption, and sustainability in campus practices.</p>
+        </div>
+      </div>
+    </a>
+
+    <a href="codechef.html">
+      <div class="club-card">
+        <div class="club-image-wrapper">
+          <img src="https://images.unsplash.com/photo-1607706189992-eae578626c86?w=700" alt="CodeChef SVECW" class="club-image"/>
+        </div>
+        <div class="club-body">
+          <h5>CodeChef SVECW</h5>
+          <p>Encouraging students to build strong foundations in competitive programming through contests and peer learning.</p>
+        </div>
+      </div>
+    </a>
+
+    <a href="aaa.html">
+      <div class="club-card">
+        <div class="club-image-wrapper">
+          <img src="https://images.unsplash.com/photo-1589637458063-7b054f0c18ab?q=80" alt="AAA Club" class="club-image"/>
+        </div>
+        <div class="club-body">
+          <h5>AAA Club</h5>
+          <p>Artistic and Aesthetic Association encourages expression through painting, crafts, design, and visual storytelling.</p>
+        </div>
+      </div>
+    </a>
+
+    <a href="eco.html">
+      <div class="club-card">
+        <div class="club-image-wrapper">
+          <img src="https://images.unsplash.com/photo-1613858749733-3a3e456e3d9e?q=80" alt="Eco Club" class="club-image"/>
+        </div>
+        <div class="club-body">
+          <h5>Eco Club</h5>
+          <p>Dedicated to promoting eco-consciousness with tree plantation drives, waste reduction, and awareness campaigns.</p>
+        </div>
+      </div>
+    </a>
+
+    <a href="painting.html">
+      <div class="club-card">
+        <div class="club-image-wrapper">
+          <img src="https://plus.unsplash.com/premium_photo-1676668708126-39b12a0e9d96?w=700" alt="Painting Club" class="club-image"/>
+        </div>
+        <div class="club-body">
+          <h5>Painting Club</h5>
+          <p>For those who love art and creativity—learn to paint, explore styles, and exhibit your imagination with colors.</p>
+        </div>
+      </div>
+    </a>
+
+    <a href="toastmasters.html">
+      <div class="club-card">
+        <div class="club-image-wrapper">
+          <img src="https://www.liblogo.com/img-logo/to2305te79-toastmasters-logo-toastmasters-international-logo-and-design-elements.png" alt="ToastMasters Club" class="club-image"/>
+        </div>
+        <div class="club-body">
+          <h5>ToastMasters</h5>
+          <p>A place to grow as a leader and public speaker, affiliated with Toastmasters International.</p>
+        </div>
+      </div>
+    </a>
+
+    <a href="flash.html">
+      <div class="club-card">
+        <div class="club-image-wrapper">
+          <img src="https://plus.unsplash.com/premium_photo-1710961232986-36cead00da3c?q=80" alt="Flash It Out" class="club-image"/>
+        </div>
+        <div class="club-body">
+          <h5>Flash It Out</h5>
+          <p>Media club that captures moments of campus life through short films, reels, and photography.</p>
+        </div>
+      </div>
+    </a>
+
+    <a href="page-turners.html">
+      <div class="club-card">
+        <div class="club-image-wrapper">
+          <img src="https://ashecountyarts.org/wp-content/uploads/2023/07/Page-Turners-Logo-Color-White-Bkgd.png" alt="Page Turners" class="club-image"/>
+        </div>
+        <div class="club-body">
+          <h5>Page Turners</h5>
+          <p>For avid readers and writers who enjoy storytelling, reviewing books, and creating literary content.</p>
+        </div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+</body>
+</html>

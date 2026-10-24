@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Events</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to bottom right, #e0f7ff, #f0e4ff);
+      padding-top: 64px;
+      margin: 0;
+    }
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: linear-gradient(to right, #111827, #1f2937, #1e40af);
+      transition: all 0.3s ease;
+      height: 10%;
+    }
+    .nav-link {
+      transition: color 0.3s ease;
+    }
+    .nav-link:hover {
+      color: #e5e7eb;
+    }
+    .nav-link.active {
+      color: #ffffff;
+      font-weight: 700;
+    }
+    .navbar-toggler-icon {
+      color: #ffffff;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    .section-title {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .section-title h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1e3a8a;
+    }
+    .section-title p {
+      font-size: 1rem;
+      color: #4b5563;
+    }
+    .filter-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .filter-section input[type="checkbox"] {
+      margin-right: 8px;
+    }
+    .filter-section label {
+      font-size: 0.9rem;
+      color: #374151;
+    }
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    .event-card {
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      width: 100%;
+      max-height: 400px;
+      overflow: hidden;
+    }
+    .event-card .club-name {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #4b5563;
+      margin-bottom: 5px;
+    }
+    .event-card h5 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #1e3a8a;
+      margin-bottom: 5px;
+    }
+    .event-card .description {
+      font-size: 0.85rem;
+      color: #6b7280;
+      margin-bottom: 10px;
+      max-height: 60px;
+      overflow-y: auto;
+    }
+    .event-details {
+      font-size: 0.85rem;
+      color: #6b7280;
+      margin: 3px 0;
+      display: flex;
+      align-items: center;
+    }
+    .event-details i {
+      margin-right: 8px;
+      color: #4f46e5;
+    }
+    .btn-primary {
+      background: linear-gradient(to right, #4f46e5, #7c3aed);
+      border: none;
+      font-size: 0.9rem;
+      padding: 8px 15px;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(to right, #4338ca, #6d28d9);
+    }
+    .btn-primary:disabled {
+      background: #6b7280;
+      cursor: not-allowed;
+    }
+    .btn-danger, .btn-secondary {
+      font-size: 0.9rem;
+      padding: 8px 15px;
+    }
+    .floating-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(to right, #4f46e5, #7c3aed);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+    }
+    .floating-btn:hover {
+      background: linear-gradient(to right, #4338ca, #6d28d9);
+    }
+    .message-card {
+      position: fixed;
+      top: 80px;
+      right: 15px;
+      z-index: 1050;
+      background: #ffffff;
+      padding: 10px 15px;
+      border-radius: 6px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      display: none;
+      max-width: 250px;
+    }
+    .message-card.success {
+      border-left: 3px solid #10b981;
+    }
+    .message-card.error {
+      border-left: 3px solid #ef4444;
+    }
+    .message-card p {
+      margin: 0;
+      font-size: 0.85rem;
+      color: #1f2937;
+    }
+    .message-card button {
+      background: none;
+      border: none;
+      font-weight: 600;
+      color: #4f46e5;
+      margin-top: 5px;
+      cursor: pointer;
+    }
+    .form-control.is-invalid {
+      border-color: #dc3545;
+    }
+    .invalid-feedback {
+      display: none;
+      color: #dc3545;
+      font-size: 0.75rem;
+    }
+    .form-control.is-invalid ~ .invalid-feedback {
+      display: block;
+    }
+    .modal-content {
+      border-radius: 10px;
+    }
+    .time-input-group {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    @media (max-width: 768px) {
+      .events-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 576px) {
+      .message-card {
+        right: 10px;
+        left: 10px;
+        max-width: none;
+      }
+      .filter-section {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body class="font-['Roboto',sans-serif]">
+  <!-- Navbar -->
+    <nav class="navbar py-4 px-4">
+    <div class="max-w-10xl mx-auto flex items-center justify-between w-full">
+      <a href="index.html" class="text-2xl font-bold text-white pl-2" style="padding-bottom: 20px;">SVECW Clubs</a>
+      <button class="md:hidden text-white focus:outline-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" onclick="document.getElementById('navbarNav').classList.toggle('hidden')">
+        <i class="fas fa-bars text-2xl navbar-toggler-icon"></i>
+      </button>
+      <div id="navbarNav" class="hidden md:flex md:items-center md:space-x-6" style="padding-bottom: 20px;" >
+        <ul class="flex flex-col md:flex-row md:space-x-6">
+          <li class="nav-item">
+            <a href="home.html" class="nav-link text-white text-base font-medium px-3 py-2">Home</a>
+          </li>
+          <li class="nav-item">
+            <a id="eventsLink" href="#" class="nav-link text-white text-base font-medium px-3 py-2">Events</a>
+          </li>
+          <li class="nav-item">
+            <a href="contactUs.html" class="nav-link text-white text-base font-medium px-3 py-2">Contact</a>
+          </li>
+          <li class="nav-item">
+            <a href="profile.html" class="nav-link text-white text-base font-medium px-3 py-2 active">Profile</a>
+          </li>
+          <li class="nav-item">
+            <a id="signOutLink" href="#" class="nav-link text-white text-base font-medium px-3 py-2">Sign out</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <section class="container">
+    <div class="section-title">
+      <h2>Manage Events</h2>
+      <p>View, create, update, and manage events.</p>
+    </div>
+    <div class="filter-section">
+      <div>
+        <input type="checkbox" id="upcomingFilter" onchange="fetchEvents()">
+        <label for="upcomingFilter">Show Upcoming Events Only</label>
+      </div>
+    </div>
+    <div id="eventsList" class="events-grid"></div>
+    <div class="floating-btn" data-bs-toggle="modal" data-bs-target="#createEventModal">+</div>
+  </section>
+
+  <div class="modal fade" id="createEventModal" tabindex="-1" aria-labelledby="createEventModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="createEventModalLabel">Create Event</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="createEventForm">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="createTitle" class="form-label">Title</label>
+              <input type="text" class="form-control" id="createTitle" required maxlength="100">
+              <div class="invalid-feedback">Please enter the event title (max 100 characters).</div>
+            </div>
+            <div class="mb-3">
+              <label for="createDescription" class="form-label">Description</label>
+              <textarea class="form-control" id="createDescription" rows="3" maxlength="500"></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="createEventDate" class="form-label">Date</label>
+              <input type="date" class="form-control" id="createEventDate" required>
+              <div class="invalid-feedback">Please select the event date.</div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Time</label>
+              <div class="time-input-group">
+                <input type="number" class="form-control" id="createEventTimeHour" min="1" max="12" required placeholder="Hour">
+                <input type="number" class="form-control" id="createEventTimeMinute" min="0" max="59" required placeholder="Minute">
+                <select class="form-control" id="createEventTimePeriod" required>
+                  <option value="" disabled selected>AM/PM</option>
+                  <option value="AM">AM</option>
+                  <option value="PM">PM</option>
+                </select>
+              </div>
+              <div class="invalid-feedback" id="createEventTimeFeedback">Please enter a valid time (e.g., 2:00 AM).</div>
+            </div>
+            <div class="mb-3">
+              <label for="createLocation" class="form-label">Location</label>
+              <input type="text" class="form-control" id="createLocation" required maxlength="100">
+              <div class="invalid-feedback">Please enter the event location (max 100 characters).</div>
+            </div>
+            <div class="mb-3">
+              <label for="createPlace" class="form-label">Place</label>
+              <input type="text" class="form-control" id="createPlace" required maxlength="100">
+              <div class="invalid-feedback">Please enter the event place (max 100 characters).</div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Create</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="editEventModal" tabindex="-1" aria-labelledby="editEventModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editEventModalLabel">Edit Event</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="editEventForm">
+          <div class="modal-body">
+            <input type="hidden" id="editEventId">
+            <div class="mb-3">
+              <label for="editTitle" class="form-label">Title</label>
+              <input type="text" class="form-control" id="editTitle" required maxlength="100">
+              <div class="invalid-feedback">Please enter the event title (max 100 characters).</div>
+            </div>
+            <div class="mb-3">
+              <label for="editDescription" class="form-label">Description</label>
+              <textarea class="form-control" id="editDescription" rows="3" maxlength="500"></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="editEventDate" class="form-label">Date</label>
+              <input type="date" class="form-control" id="editEventDate" required>
+              <div class="invalid-feedback">Please select the event date.</div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Time</label>
+              <div class="time-input-group">
+                <input type="number" class="form-control" id="editEventTimeHour" min="1" max="12" required placeholder="Hour">
+                <input type="number" class="form-control" id="editEventTimeMinute" min="0" max="59" required placeholder="Minute">
+                <select class="form-control" id="editEventTimePeriod" required>
+                  <option value="" disabled>AM/PM</option>
+                  <option value="AM">AM</option>
+                  <option value="PM">PM</option>
+                </select>
+              </div>
+              <div class="invalid-feedback" id="editEventTimeFeedback">Please enter a valid time (e.g., 2:00 AM).</div>
+            </div>
+            <div class="mb-3">
+              <label for="editLocation" class="form-label">Location</label>
+              <input type="text" class="form-control" id="editLocation" required maxlength="100">
+              <div class="invalid-feedback">Please enter the event location (max 100 characters).</div>
+            </div>
+            <div class="mb-3">
+              <label for="editPlace" class="form-label">Place</label>
+              <input type="text" class="form-control" id="editPlace" required maxlength="100">
+              <div class="invalid-feedback">Please enter the event place (max 100 characters).</div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="registrationsModal" tabindex="-1" aria-labelledby="registrationsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="registrationsModalLabel">Event Registrations</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div id="loadingSpinner" class="text-center" style="display: none;">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Serial No.</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Branch</th>
+                <th>Registration Number</th>
+                <th>Phone Number</th>
+                <th>Registered At</th>
+              </tr>
+            </thead>
+            <tbody id="registrationsTable"></tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="registerModalLabel">Register for Event</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="registerForm">
+          <div class="modal-body">
+            <input type="hidden" id="registerEventId">
+            <div class="mb-3">
+              <label for="registerName" class="form-label">Name</label>
+              <input type="text" class="form-control" id="registerName" required maxlength="100" pattern="[A-Za-z\s]+">
+              <div class="invalid-feedback">Please enter a valid name (letters and spaces only, max 100 characters).</div>
+            </div>
+            <div class="mb-3">
+              <label for="registerEmail" class="form-label">Email</label>
+              <input type="email" class="form-control" id="registerEmail" required maxlength="100">
+              <div class="invalid-feedback">Please enter a valid email address (max 100 characters).</div>
+            </div>
+            <div class="mb-3">
+              <label for="registerBranch" class="form-label">Branch</label>
+              <input type="text" class="form-control" id="registerBranch" required maxlength="50">
+              <div class="invalid-feedback">Please enter your branch (max 50 characters).</div>
+            </div>
+            <div class="mb-3">
+              <label for="registerNumber" class="form-label">Registration Number</label>
+              <input type="text" class="form-control" id="registerNumber" required maxlength="20" pattern="[A-Za-z0-9]+">
+              <div class="invalid-feedback">Please enter a valid alphanumeric registration number (max 20 characters).</div>
+            </div>
+            <div class="mb-3">
+              <label for="registerPhone" class="form-label">Phone Number</label>
+              <input type="tel" class="form-control" id="registerPhone" required maxlength="14" pattern="\+?[0-9]{10,14}">
+              <div class="invalid-feedback">Please enter a valid phone number (e.g., +919876543210, max 14 digits).</div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Register</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="messageCard" class="message-card">
+    <p id="messageText"></p>
+    <button onclick="hideMessage()">Close</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const API_BASE_URL = 'http://localhost:3000';
+    const userClub = localStorage.getItem('club');
+    const userRole = localStorage.getItem('role');
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const role = localStorage.getItem('role');
+      if (!role) {
+        window.location.href = 'index.html';
+        return;
+      }
+      const navbarNav = document.getElementById('navbarNav');
+      navbarNav.classList.add('hidden');
+      const eventsLink = document.getElementById('eventsLink');
+      if (role === 'CLUB_ADMIN' || role === 'CLUB_MEMBER') {
+        eventsLink.href = 'events_admin.html';
+      } else {
+        eventsLink.href = 'events_student.html';
+      }
+      document.getElementById('signOutLink').addEventListener('click', (e) => {
+        e.preventDefault();
+        localStorage.removeItem('role');
+        localStorage.removeItem('club');
+        localStorage.removeItem('token');
+        window.location.href = 'index.html';
+      });
+      if (!['CLUB_ADMIN', 'CLUB_MEMBER'].includes(userRole)) {
+        showMessage('Unauthorized access', 'error');
+        setTimeout(() => { window.location.href = 'index.html'; }, 2000);
+        return;
+      }
+      console.log('User details:', { club: userClub, role: userRole, token: localStorage.getItem('token')?.substring(0, 20) + '...' });
+      fetchEvents();
+    });
+
+    function showMessage(message, type = 'error') {
+      const messageCard = document.getElementById('messageCard');
+      const messageText = document.getElementById('messageText');
+      messageText.textContent = message;
+      messageCard.className = `message-card ${type}`;
+      messageCard.style.display = 'block';
+      setTimeout(hideMessage, 5000);
+    }
+
+    function hideMessage() {
+      document.getElementById('messageCard').style.display = 'none';
+    }
+
+    function sanitizeInput(input) {
+      const div = document.createElement('div');
+      div.textContent = input;
+      return div.innerHTML;
+    }
+
+    function convertTo24HourFormat(hour, minute, period) {
+      let adjustedHour = parseInt(hour, 10);
+      const adjustedMinute = parseInt(minute, 10);
+      if (period === 'PM' && adjustedHour !== 12) adjustedHour += 12;
+      if (period === 'AM' && adjustedHour === 12) adjustedHour = 0;
+      return `${adjustedHour.toString().padStart(2, '0')}:${adjustedMinute.toString().padStart(2, '0')}`;
+    }
+
+    function convertTo12HourFormat(timeStr) {
+      if (!timeStr) return 'N/A';
+      const [hours, minutes] = timeStr.split(':').map(Number);
+      const period = hours >= 12 ? 'PM' : 'AM';
+      const adjustedHours = hours % 12 || 12;
+      return `${adjustedHours}:${minutes.toString().padStart(2, '0')} ${period}`;
+    }
+
+    function parseTimeForEdit(timeStr) {
+      if (!timeStr) return { hour: '', minute: '', period: '' };
+      const [hours, minutes] = timeStr.split(':').map(Number);
+      const period = hours >= 12 ? 'PM' : 'AM';
+      let adjustedHours = hours % 12 || 12;
+      return {
+        hour: adjustedHours.toString(),
+        minute: minutes.toString().padStart(2, '0'),
+        period: period
+      };
+    }
+
+    async function fetchEvents() {
+      const upcomingFilter = document.getElementById('upcomingFilter').checked;
+      const query = new URLSearchParams();
+      if (upcomingFilter) {
+        query.set('upcoming', 'true');
+      }
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/events?${query.toString()}`, {
+          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        });
+        const data = await response.json();
+        console.log('Fetch Events Response:', JSON.stringify(data, null, 2));
+        if (response.ok && data.status === 'success') {
+          displayEvents(data.data);
+        } else {
+          showMessage(data.message || 'Failed to fetch events', 'error');
+        }
+      } catch (err) {
+        console.error('Fetch Events Error:', err);
+        showMessage('Error fetching events: ' + err.message, 'error');
+      }
+    }
+
+    async function displayEvents(events) {
+      const eventsList = document.getElementById('eventsList');
+      eventsList.innerHTML = '';
+      if (!events || events.length === 0) {
+        eventsList.innerHTML = '<p class="text-center">No events found.</p>';
+        return;
+      }
+      console.log('Total events received:', events.length);
+      for (const event of events) {
+        console.log('Processing event:', JSON.stringify(event, null, 2));
+        const eventId = event.event_id;
+        if (!eventId || eventId === 'registrations' || !/^[0-9a-fA-F]{24}$/.test(eventId)) {
+          console.warn('Skipping event with invalid or suspicious event_id:', eventId, 'Event:', event);
+          showMessage(`Skipping event "${sanitizeInput(event.title) || 'Unknown'}" due to invalid ID: ${sanitizeInput(eventId) || 'missing'}`, 'error');
+          continue;
+        }
+        console.log('Rendering event with ID:', eventId);
+        const isOwnClub = event.club === userClub;
+        const isRegistered = await checkRegistration(eventId);
+        console.log(`Event ${eventId} - isRegistered: ${isRegistered}`);
+        const canRegister = userRole === 'CLUB_MEMBER' && !isOwnClub && !(userClub === 'ISTE' && event.club === 'Page Turners');
+        const eventCard = document.createElement('div');
+        eventCard.className = 'event-card';
+        const eventDate = event.event_date ? new Date(event.event_date) : null;
+        const formattedDate = eventDate ? eventDate.toLocaleDateString('en-GB', {
+          day: 'numeric', month: 'numeric', year: 'numeric'
+        }) : 'N/A';
+        const formattedTime = convertTo12HourFormat(event.event_time);
+        eventCard.innerHTML = `
+          <p class="club-name">${sanitizeInput(event.club) || 'Unknown'}</p>
+          <h5>${sanitizeInput(event.title) || 'Untitled'}</h5>
+          <p class="description">${sanitizeInput(event.description) || 'No description available'}</p>
+          <p class="event-details"><i class="fas fa-calendar-alt"></i><strong>Date:</strong> ${formattedDate}</p>
+          <p class="event-details"><i class="fas fa-clock"></i><strong>Time:</strong> ${formattedTime}</p>
+          <p class="event-details"><i class="fas fa-map-marker-alt"></i><strong>Location:</strong> ${sanitizeInput(event.location) || 'N/A'}</p>
+          <p class="event-details"><i class="fas fa-building"></i><strong>Place:</strong> ${sanitizeInput(event.place) || 'N/A'}</p>
+          <div class="mt-3">
+            ${isOwnClub ? `
+              <button class="btn btn-primary me-2" onclick='showEditModal(${JSON.stringify(event)})'>Edit</button>
+              <button class="btn btn-danger me-2" onclick='deleteEvent("${eventId}")'>Delete</button>
+              <button class="btn btn-secondary me-2" onclick='showRegistrations("${eventId}")' data-event-id="${eventId}">View Registrations</button>
+            ` : ''}
+            ${canRegister ? `
+              <button class="btn btn-primary me-2" onclick='showRegisterModal(${JSON.stringify(event)})' ${isRegistered ? 'disabled' : ''}>
+                ${isRegistered ? 'Already Registered' : 'Register'}
+              </button>
+            ` : ''}
+          </div>
+        `;
+        eventsList.appendChild(eventCard);
+      }
+    }
+
+    function showEditModal(event) {
+      console.log('Opening edit modal for event:', event);
+      if (!event.event_id || !/^[0-9a-fA-F]{24}$/.test(event.event_id)) {
+        showMessage('Invalid event ID', 'error');
+        return;
+      }
+      document.getElementById('editEventId').value = event.event_id;
+      document.getElementById('editTitle').value = event.title || '';
+      document.getElementById('editDescription').value = event.description || '';
+      const eventDate = event.event_date ? new Date(event.event_date) : null;
+      document.getElementById('editEventDate').value = eventDate ? eventDate.toISOString().split('T')[0] : '';
+      const timeParts = parseTimeForEdit(event.event_time);
+      document.getElementById('editEventTimeHour').value = timeParts.hour;
+      document.getElementById('editEventTimeMinute').value = timeParts.minute;
+      document.getElementById('editEventTimePeriod').value = timeParts.period;
+      document.getElementById('editLocation').value = event.location || '';
+      document.getElementById('editPlace').value = event.place || '';
+      const modal = new bootstrap.Modal(document.getElementById('editEventModal'));
+      modal.show();
+    }
+
+    function showRegisterModal(event) {
+      console.log('Opening register modal for event:', event);
+      if (!event.event_id || !/^[0-9a-fA-F]{24}$/.test(event.event_id)) {
+        showMessage('Invalid event ID', 'error');
+        return;
+      }
+      document.getElementById('registerEventId').value = event.event_id;
+      document.getElementById('registerName').value = '';
+      document.getElementById('registerEmail').value = '';
+      document.getElementById('registerBranch').value = '';
+      document.getElementById('registerNumber').value = '';
+      document.getElementById('registerPhone').value = '';
+      const modal = new bootstrap.Modal(document.getElementById('registerModal'));
+      modal.show();
+    }
+
+    async function showRegistrations(eventId) {
+      console.log('Calling showRegistrations with eventId:', eventId, 'Type:', typeof eventId);
+      if (!eventId || eventId === 'registrations' || typeof eventId !== 'string' || !/^[0-9a-fA-F]{24}$/.test(eventId)) {
+        console.error('Invalid eventId:', eventId);
+        showMessage(`Invalid event ID: ${sanitizeInput(eventId) || 'missing'}`, 'error');
+        return;
+      }
+      const tableBody = document.getElementById('registrationsTable');
+      const loadingSpinner = document.getElementById('loadingSpinner');
+      tableBody.innerHTML = '';
+      loadingSpinner.style.display = 'block';
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/events/registrations?eventId=${encodeURIComponent(eventId)}`, {
+          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        });
+        const data = await response.json();
+        console.log('Registrations API Response:', JSON.stringify(data, null, 2));
+        loadingSpinner.style.display = 'none';
+        if (response.ok && data.status === 'success') {
+          if (!data.data || data.data.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="7" class="text-center">No registrations found.</td></tr>';
+          } else {
+            data.data.forEach((reg, index) => {
+              const row = document.createElement('tr');
+              row.innerHTML = `
+                <td>${reg.serial_number || index + 1}</td>
+                <td>${sanitizeInput(reg.name) || 'N/A'}</td>
+                <td>${sanitizeInput(reg.email) || 'N/A'}</td>
+                <td>${sanitizeInput(reg.branch) || 'N/A'}</td>
+                <td>${sanitizeInput(reg.registration_number) || 'N/A'}</td>
+                <td>${sanitizeInput(reg.phone_number) || 'N/A'}</td>
+                <td>${reg.registered_at ? new Date(reg.registered_at).toLocaleString() : 'N/A'}</td>
+              `;
+              tableBody.appendChild(row);
+            });
+          }
+          const modal = new bootstrap.Modal(document.getElementById('registrationsModal'));
+          modal.show();
+        } else {
+          console.error('API Error:', data.message || 'Unknown error');
+          tableBody.innerHTML = '<tr><td colspan="7" class="text-center">Failed to load registrations.</td></tr>';
+          if (response.status === 401) {
+            showMessage('Session expired. Please log in again.', 'error');
+            setTimeout(() => {
+              localStorage.clear();
+              window.location.href = 'index.html';
+            }, 2000);
+          } else {
+            showMessage(data.message || 'Failed to fetch registrations', 'error');
+          }
+        }
+      } catch (err) {
+        console.error('Error fetching registrations:', err);
+        loadingSpinner.style.display = 'none';
+        tableBody.innerHTML = '<tr><td colspan="7" class="text-center">Error loading registrations.</td></tr>';
+        showMessage('Error fetching registrations: ' + err.message, 'error');
+      }
+    }
+
+    async function deleteEvent(eventId) {
+      if (!confirm('Are you sure you want to delete this event?')) return;
+      if (!eventId || !/^[0-9a-fA-F]{24}$/.test(eventId)) {
+        showMessage('Invalid event ID', 'error');
+        return;
+      }
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/events/${eventId}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        });
+        const data = await response.json();
+        console.log('Delete Event Response:', data);
+        if (response.ok && data.status === 'success') {
+          showMessage('Event deleted successfully', 'success');
+          fetchEvents();
+        } else {
+          showMessage(data.message || 'Failed to delete event', 'error');
+        }
+      } catch (err) {
+        console.error('Error deleting event:', err);
+        showMessage('Error deleting event: ' + err.message, 'error');
+      }
+    }
+
+    document.getElementById('createEventForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const form = e.target;
+      const hourInput = document.getElementById('createEventTimeHour');
+      const minuteInput = document.getElementById('createEventTimeMinute');
+      const periodInput = document.getElementById('createEventTimePeriod');
+      const hour = parseInt(hourInput.value);
+      const minute = parseInt(minuteInput.value);
+      const period = periodInput.value;
+
+      if (!hour || hour < 1 || hour > 12 || !minute || minute < 0 || minute > 59 || !period) {
+        hourInput.classList.add('is-invalid');
+        minuteInput.classList.add('is-invalid');
+        periodInput.classList.add('is-invalid');
+        document.getElementById('createEventTimeFeedback').style.display = 'block';
+        return;
+      }
+
+      if (!form.checkValidity()) {
+        form.classList.add('was-validated');
+        return;
+      }
+
+      const eventTime = convertTo24HourFormat(hour, minute, period);
+      const data = {
+        title: sanitizeInput(document.getElementById('createTitle').value),
+        description: sanitizeInput(document.getElementById('createDescription').value),
+        event_date: document.getElementById('createEventDate').value,
+        event_time: eventTime,
+        location: sanitizeInput(document.getElementById('createLocation').value),
+        place: sanitizeInput(document.getElementById('createPlace').value),
+      };
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/events`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
+          body: JSON.stringify(data)
+        });
+        const dataResponse = await response.json();
+        console.log('Create Event Response:', dataResponse);
+        if (response.ok && dataResponse.status === 'success') {
+          showMessage('Event created successfully', 'success');
+          bootstrap.Modal.getInstance(document.getElementById('createEventModal')).hide();
+          form.reset();
+          form.classList.remove('was-validated');
+          fetchEvents();
+        } else {
+          showMessage(dataResponse.message || 'Error creating event', 'error');
+        }
+      } catch (err) {
+        console.error('Error creating event:', err);
+        showMessage('Error creating event: ' + err.message, 'error');
+      }
+    });
+
+    document.getElementById('editEventForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const form = e.target;
+      const hourInput = document.getElementById('editEventTimeHour');
+      const minuteInput = document.getElementById('editEventTimeMinute');
+      const periodInput = document.getElementById('editEventTimePeriod');
+      const hour = parseInt(hourInput.value);
+      const minute = parseInt(minuteInput.value);
+      const period = periodInput.value;
+
+      if (!hour || hour < 1 || hour > 12 || !minute || minute < 0 || minute > 59 || !period) {
+        hourInput.classList.add('is-invalid');
+        minuteInput.classList.add('is-invalid');
+        periodInput.classList.add('is-invalid');
+        document.getElementById('editEventTimeFeedback').style.display = 'block';
+        return;
+      }
+
+      if (!form.checkValidity()) {
+        form.classList.add('was-validated');
+        return;
+      }
+
+      const eventId = document.getElementById('editEventId').value;
+      if (!eventId || !/^[0-9a-fA-F]{24}$/.test(eventId)) {
+        showMessage('Invalid event ID', 'error');
+        return;
+      }
+      const eventTime = convertTo24HourFormat(hour, minute, period);
+      const data = {
+        title: sanitizeInput(document.getElementById('editTitle').value),
+        description: sanitizeInput(document.getElementById('editDescription').value),
+        event_date: document.getElementById('editEventDate').value,
+        event_time: eventTime,
+        location: sanitizeInput(document.getElementById('editLocation').value),
+        place: sanitizeInput(document.getElementById('editPlace').value),
+      };
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/events/${eventId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
+          body: JSON.stringify(data)
+        });
+        const dataResponse = await response.json();
+        console.log('Update Event Response:', dataResponse);
+        if (response.ok && dataResponse.status === 'success') {
+          showMessage('Event updated successfully', 'success');
+          bootstrap.Modal.getInstance(document.getElementById('editEventModal')).hide();
+          form.classList.remove('was-validated');
+          fetchEvents();
+        } else {
+          showMessage(dataResponse.message || 'Error updating event', 'error');
+        }
+      } catch (err) {
+        console.error('Error updating event:', err);
+        showMessage('Error updating event: ' + err.message, 'error');
+      }
+    });
+
+    document.getElementById('registerForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const form = e.target;
+      if (!form.checkValidity()) {
+        form.classList.add('was-validated');
+        return;
+      }
+      const eventId = document.getElementById('registerEventId').value;
+      if (!eventId || !/^[0-9a-fA-F]{24}$/.test(eventId)) {
+        showMessage('Invalid event ID', 'error');
+        return;
+      }
+      const data = {
+        eventId: eventId,
+        name: sanitizeInput(document.getElementById('registerName').value),
+        email: document.getElementById('registerEmail').value,
+        branch: sanitizeInput(document.getElementById('registerBranch').value),
+        registrationNumber: document.getElementById('registerNumber').value,
+        phoneNumber: document.getElementById('registerPhone').value
+      };
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/events/registrations`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
+          body: JSON.stringify(data)
+        });
+        const dataResponse = await response.json();
+        console.log('Register Response:', dataResponse);
+        if (response.ok && dataResponse.status === 'success') {
+          showMessage('Registered successfully', 'success');
+          bootstrap.Modal.getInstance(document.getElementById('registerModal')).hide();
+          form.reset();
+          form.classList.remove('was-validated');
+          fetchEvents();
+        } else {
+          showMessage(dataResponse.message || 'Error registering for event', 'error');
+        }
+      } catch (err) {
+        console.error('Registration Error:', err);
+        showMessage('Error registering for event: ' + err.message, 'error');
+      }
+    });
+
+    async function checkRegistration(eventId) {
+      if (!eventId || !/^[0-9a-fA-F]{24}$/.test(eventId)) {
+        console.error('checkRegistration called with invalid eventId:', eventId);
+        showMessage('Invalid event ID in registration check', 'error');
+        return false;
+      }
+      try {
+        console.log(`Checking registration for eventId: ${eventId}`);
+        const response = await fetch(`${API_BASE_URL}/api/events/registrations/check?eventId=${encodeURIComponent(eventId)}`, {
+          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        });
+        const data = await response.json();
+        console.log(`Check Registration Response for event ${eventId}:`, data);
+        if (response.ok && data.status === 'success') {
+          const isRegistered = data.isRegistered === true;
+          console.log(`User is ${isRegistered ? '' : 'not '}registered for event ${eventId}`);
+          return isRegistered;
+        } else {
+          console.warn(`Check Registration failed for event ${eventId}:`, data.message || 'Unknown error');
+          showMessage(data.message || 'Failed to check registration status', 'error');
+          return false;
+        }
+      } catch (err) {
+        console.error('Error checking registration for event', eventId, ':', err);
+        showMessage('Error checking registration: ' + err.message, 'error');
+        return false;
+      }
+    }
+  </script>
+</body>
+</html>
